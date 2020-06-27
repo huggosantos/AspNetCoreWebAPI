@@ -1,0 +1,6 @@
+bin/
+obj/
+CompraFacil.API/
+CompraFacil.sln    
+.vscode/
+.vs/
