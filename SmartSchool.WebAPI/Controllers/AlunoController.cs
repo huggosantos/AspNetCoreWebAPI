@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SmartSchool.WebAPI.Models;
-
+using SmartSchool.WebAPI.Data;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace SmartSchool.WebAPI.Controllers
@@ -14,42 +14,39 @@ namespace SmartSchool.WebAPI.Controllers
     [ApiController]
     public class AlunoController : ControllerBase
     {
-     
-      public List<Aluno> Alunos = new List<Aluno>(){
-            new Aluno(){
-                Id=1,
-                Nome = "jOTA",
-                Telefone = "123123213"
-            },
-              new Aluno(){
-                Id=2,
-                Nome = "dsa",
-                Telefone = "123123213"
-            },
-              new Aluno(){
-                Id=3,
-                Nome = "jOTdsaA",
-                Telefone = "123123213"
-            },
-        };
-        // GET: api/<AlunoController>
-     /*    [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly SmartContext _context;
+
+        public AlunoController(SmartContext context)
         {
-            return new string[] { "value1", "value2" };
-        } */
+            _context = context;
+
+        }
+        // GET: api/<AlunoController>
+        /*    [HttpGet]
+           public IEnumerable<string> Get()
+           {
+               return new string[] { "value1", "value2" };
+           } */
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(Alunos);
+            return Ok(_context.Alunos);
         }
 
-        [HttpGet("byid/{id}")]
+        [HttpGet("byId/{id}")]
         public IActionResult GetById(int id)
         {
-            var aluno = Alunos.FirstOrDefault(aluno => aluno.Id ==id);
-            if(aluno == null) return BadRequest("O Aluno não foi encontrado");
+            var aluno = _context.Alunos.FirstOrDefault(aluno => aluno.Id == id);
+            if (aluno == null) return BadRequest("O Aluno não foi encontrado");
+            return Ok(aluno);
+        }
+
+        [HttpGet("byName")]
+        public IActionResult GetByName(string nome)
+        {
+            var aluno = _context.Alunos.FirstOrDefault(aluno => aluno.Nome.Contains(nome));
+            if (aluno == null) return BadRequest("O Aluno não foi encontrado");
             return Ok(aluno);
         }
 
@@ -76,34 +73,34 @@ namespace SmartSchool.WebAPI.Controllers
         {
             return Ok();
         }
-        
+
 
         // GET api/<AlunoController>/5
-      /*  [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        /*  [HttpGet("{id}")]
+          public string Get(int id)
+          {
+              return "value";
+          }
 
-        // POST api/<AlunoController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
+          // POST api/<AlunoController>
+          [HttpPost]
+          public void Post([FromBody] string value)
+          {
 
-        }
-        
+          }
 
-        // PUT api/<AlunoController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
-        // DELETE api/<AlunoController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-        */
+          // PUT api/<AlunoController>/5
+          [HttpPut("{id}")]
+          public void Put(int id, [FromBody] string value)
+          {
+          }
+
+          // DELETE api/<AlunoController>/5
+          [HttpDelete("{id}")]
+          public void Delete(int id)
+          {
+          }
+          */
     }
 }
